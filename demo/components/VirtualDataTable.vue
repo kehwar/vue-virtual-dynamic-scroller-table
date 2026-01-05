@@ -77,6 +77,7 @@ defineExpose({
           v-for="headerGroup in table.getHeaderGroups()"
           :key="headerGroup.id"
           class="flex"
+          style="min-width: min-content;"
         >
           <div
             v-for="header in headerGroup.headers"
@@ -115,6 +116,7 @@ defineExpose({
             <div
               :data-state="row.getIsSelected() && 'selected'"
               class="flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+              style="min-width: min-content;"
             >
               <div
                 v-for="cell in row.getVisibleCells()"
@@ -149,6 +151,5 @@ defineExpose({
   height: 600px;
   width: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 </style>
