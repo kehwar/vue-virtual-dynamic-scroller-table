@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TData, TValue">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import type {
   ColumnDef,
   SortingState,
@@ -63,6 +63,31 @@ const table = useVueTable({
 
 const rows = computed(() => table.getRowModel().rows)
 
+const containerRef = ref<HTMLElement | null>(null)
+const scrollerRef = ref<InstanceType<typeof DynamicScroller> | null>(null)
+
+// Sync horizontal scroll between container and scroller
+const onContainerScroll = () => {
+  if (containerRef.value && scrollerRef.value) {
+    const scrollerEl = scrollerRef.value.$el as HTMLElement
+    if (scrollerEl) {
+      scrollerEl.scrollLeft = containerRef.value.scrollLeft
+    }
+  }
+}
+
+onMounted(() => {
+  if (containerRef.value) {
+    containerRef.value.addEventListener('scroll', onContainerScroll)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (containerRef.value) {
+    containerRef.value.removeEventListener('scroll', onContainerScroll)
+  }
+})
+
 defineExpose({
   table,
 })
@@ -70,7 +95,7 @@ defineExpose({
 
 <template>
   <div class="w-full">
-    <div class="rounded-md border bg-background overflow-x-auto">
+    <div ref="containerRef" class="rounded-md border bg-background overflow-x-auto">
       <!-- Header -->
       <div class="border-b">
         <div
@@ -101,6 +126,7 @@ defineExpose({
       <!-- Virtual Scrolled Body -->
       <DynamicScroller
         v-if="rows.length"
+        ref="scrollerRef"
         :items="rows"
         :min-item-size="minItemSize"
         key-field="id"
@@ -151,5 +177,6 @@ defineExpose({
   height: 600px;
   width: 100%;
   overflow-y: auto;
+  overflow-x: auto;
 }
 </style>
