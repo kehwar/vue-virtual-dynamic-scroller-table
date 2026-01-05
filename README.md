@@ -166,8 +166,8 @@ const rows = computed(() => table.getRowModel().rows)
             :key="header.id"
             class="h-12 px-4 text-left align-middle font-medium text-muted-foreground flex items-center"
             :style="{ 
-              width: header.getSize() !== 150 ? `${header.getSize()}px` : 'auto',
-              minWidth: header.getSize() !== 150 ? `${header.getSize()}px` : 'auto',
+              width: `${header.getSize()}px`,
+              minWidth: `${header.getSize()}px`,
               flexShrink: 0
             }"
           >
@@ -201,8 +201,8 @@ const rows = computed(() => table.getRowModel().rows)
                 :key="cell.id"
                 class="p-4 align-middle flex items-center"
                 :style="{ 
-                  width: cell.column.getSize() !== 150 ? `${cell.column.getSize()}px` : 'auto',
-                  minWidth: cell.column.getSize() !== 150 ? `${cell.column.getSize()}px` : 'auto',
+                  width: `${cell.column.getSize()}px`,
+                  minWidth: `${cell.column.getSize()}px`,
                   flexShrink: 0
                 }"
               >
