@@ -21,6 +21,9 @@ npm install radix-vue class-variance-authority clsx tailwind-merge lucide-vue-ne
 
 # Tailwind CSS module for Nuxt
 npm install -D @nuxtjs/tailwindcss
+
+# shadcn-nuxt module (recommended for Nuxt integration)
+npm install -D shadcn-nuxt
 ```
 
 ### 2. Configure Nuxt
@@ -29,7 +32,12 @@ Update `nuxt.config.ts`:
 
 ```typescript
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt'],
+  
+  shadcn: {
+    prefix: '',
+    componentDir: './components/ui',
+  },
   
   app: {
     head: {
@@ -47,6 +55,8 @@ export default defineNuxtConfig({
   }
 })
 ```
+
+> **Note:** The `shadcn-nuxt` module provides better Nuxt integration with auto-imports and CLI tooling for managing shadcn-vue components. It simplifies component management and ensures compatibility with Nuxt's build system.
 
 ### 3. Configure Tailwind CSS
 
@@ -91,7 +101,39 @@ Create `assets/css/main.css`:
 }
 ```
 
-### 4. Create Plugin for vue-virtual-scroller
+### 4. Create shadcn-vue Configuration (Optional)
+
+Create `components.json` for shadcn-vue CLI support:
+
+```json
+{
+  "$schema": "https://www.shadcn-vue.com/schema.json",
+  "style": "default",
+  "typescript": true,
+  "tsx": false,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "assets/css/main.css",
+    "baseColor": "slate",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "framework": "nuxt",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils"
+  },
+  "componentDir": "./components/ui"
+}
+```
+
+This allows you to use the shadcn-vue CLI to add or update components:
+
+```bash
+npx shadcn-vue@latest add button
+```
+
+### 5. Create Plugin for vue-virtual-scroller
 
 Create `plugins/vue-virtual-scroller.client.ts`:
 
@@ -103,7 +145,7 @@ export default defineNuxtPlugin(() => {
 })
 ```
 
-### 5. Copy Required Components
+### 6. Copy Required Components
 
 Copy these files/directories to your Nuxt project:
 
@@ -124,7 +166,7 @@ Copy these files/directories to your Nuxt project:
     └── vue-virtual-scroller.d.ts
 ```
 
-### 6. Create Type Definitions
+### 7. Create Type Definitions
 
 Create `types/vue-virtual-scroller.d.ts`:
 
@@ -146,7 +188,7 @@ declare module 'vue-virtual-scroller' {
 }
 ```
 
-### 4. Create Your Data Model
+### 8. Create Your Data Model
 
 ```typescript
 interface MyDataType {
@@ -158,7 +200,7 @@ interface MyDataType {
 }
 ```
 
-### 5. Define Columns
+### 9. Define Columns
 
 ```typescript
 import { h } from 'vue'
@@ -188,7 +230,7 @@ const columns: ColumnDef<MyDataType>[] = [
 ]
 ```
 
-### 7. Use the Component in Your Nuxt App
+### 10. Use the Component in Your Nuxt App
 
 In your `app.vue` or any page:
 
