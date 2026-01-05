@@ -70,13 +70,13 @@ defineExpose({
 
 <template>
   <div class="w-full">
-    <div class="rounded-md border bg-background">
+    <div class="rounded-md border bg-background overflow-x-auto">
       <!-- Header -->
       <div class="border-b">
         <div
           v-for="headerGroup in table.getHeaderGroups()"
           :key="headerGroup.id"
-          class="flex w-full"
+          class="flex"
         >
           <div
             v-for="header in headerGroup.headers"
@@ -114,7 +114,7 @@ defineExpose({
           >
             <div
               :data-state="row.getIsSelected() && 'selected'"
-              class="flex w-full border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+              class="flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
             >
               <div
                 v-for="cell in row.getVisibleCells()"
@@ -149,5 +149,6 @@ defineExpose({
   height: 600px;
   width: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
