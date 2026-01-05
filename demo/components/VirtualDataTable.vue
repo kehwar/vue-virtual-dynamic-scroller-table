@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TData, TValue">
-import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref } from 'vue'
 import type {
   ColumnDef,
   SortingState,
@@ -63,31 +63,6 @@ const table = useVueTable({
 
 const rows = computed(() => table.getRowModel().rows)
 
-const containerRef = ref<HTMLElement | null>(null)
-const scrollerRef = ref<InstanceType<typeof DynamicScroller> | null>(null)
-
-// Sync horizontal scroll between container and scroller
-const onContainerScroll = () => {
-  if (containerRef.value && scrollerRef.value) {
-    const scrollerEl = scrollerRef.value.$el as HTMLElement
-    if (scrollerEl) {
-      scrollerEl.scrollLeft = containerRef.value.scrollLeft
-    }
-  }
-}
-
-onMounted(() => {
-  if (containerRef.value) {
-    containerRef.value.addEventListener('scroll', onContainerScroll)
-  }
-})
-
-onBeforeUnmount(() => {
-  if (containerRef.value) {
-    containerRef.value.removeEventListener('scroll', onContainerScroll)
-  }
-})
-
 defineExpose({
   table,
 })
@@ -95,88 +70,92 @@ defineExpose({
 
 <template>
   <div class="w-full">
-    <div ref="containerRef" class="rounded-md border bg-background overflow-x-auto">
-      <!-- Header -->
-      <div class="border-b">
-        <div
-          v-for="headerGroup in table.getHeaderGroups()"
-          :key="headerGroup.id"
-          class="flex"
-          style="min-width: min-content;"
-        >
+    <div class="rounded-md border bg-background">
+      <div class="table-wrapper">
+        <!-- Header -->
+        <div class="border-b">
           <div
-            v-for="header in headerGroup.headers"
-            :key="header.id"
-            class="h-12 px-4 text-left align-middle font-medium text-muted-foreground flex items-center"
-            :style="{ 
-              width: `${header.getSize()}px`,
-              minWidth: `${header.getSize()}px`,
-              flexShrink: 0
-            }"
-          >
-            <FlexRender
-              v-if="!header.isPlaceholder"
-              :render="header.column.columnDef.header"
-              :props="header.getContext()"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Virtual Scrolled Body -->
-      <DynamicScroller
-        v-if="rows.length"
-        ref="scrollerRef"
-        :items="rows"
-        :min-item-size="minItemSize"
-        key-field="id"
-        class="scroller"
-      >
-        <template #default="{ item: row, index, active }">
-          <DynamicScrollerItem
-            :item="row"
-            :active="active"
-            :data-index="index"
-            :size-dependencies="[row.id]"
+            v-for="headerGroup in table.getHeaderGroups()"
+            :key="headerGroup.id"
+            class="flex"
           >
             <div
-              :data-state="row.getIsSelected() && 'selected'"
-              class="flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-              style="min-width: min-content;"
+              v-for="header in headerGroup.headers"
+              :key="header.id"
+              class="h-12 px-4 text-left align-middle font-medium text-muted-foreground flex items-center"
+              :style="{ 
+                width: `${header.getSize()}px`,
+                minWidth: `${header.getSize()}px`,
+                flexShrink: 0
+              }"
+            >
+              <FlexRender
+                v-if="!header.isPlaceholder"
+                :render="header.column.columnDef.header"
+                :props="header.getContext()"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Virtual Scrolled Body -->
+        <DynamicScroller
+          v-if="rows.length"
+          :items="rows"
+          :min-item-size="minItemSize"
+          key-field="id"
+          class="scroller"
+        >
+          <template #default="{ item: row, index, active }">
+            <DynamicScrollerItem
+              :item="row"
+              :active="active"
+              :data-index="index"
+              :size-dependencies="[row.id]"
             >
               <div
-                v-for="cell in row.getVisibleCells()"
-                :key="cell.id"
-                class="p-4 align-middle flex items-center"
-                :style="{ 
-                  width: `${cell.column.getSize()}px`,
-                  minWidth: `${cell.column.getSize()}px`,
-                  flexShrink: 0
-                }"
+                :data-state="row.getIsSelected() && 'selected'"
+                class="flex border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
               >
-                <FlexRender
-                  :render="cell.column.columnDef.cell"
-                  :props="cell.getContext()"
-                />
+                <div
+                  v-for="cell in row.getVisibleCells()"
+                  :key="cell.id"
+                  class="p-4 align-middle flex items-center"
+                  :style="{ 
+                    width: `${cell.column.getSize()}px`,
+                    minWidth: `${cell.column.getSize()}px`,
+                    flexShrink: 0
+                  }"
+                >
+                  <FlexRender
+                    :render="cell.column.columnDef.cell"
+                    :props="cell.getContext()"
+                  />
+                </div>
               </div>
-            </div>
-          </DynamicScrollerItem>
-        </template>
-      </DynamicScroller>
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
 
-      <!-- Empty state -->
-      <div v-else class="h-24 text-center flex items-center justify-center text-muted-foreground">
-        No results.
+        <!-- Empty state -->
+        <div v-else class="h-24 text-center flex items-center justify-center text-muted-foreground">
+          No results.
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 .scroller {
   height: 600px;
   width: 100%;
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: visible;
 }
 </style>
