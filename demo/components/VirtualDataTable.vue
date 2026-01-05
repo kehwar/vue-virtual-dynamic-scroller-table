@@ -13,7 +13,6 @@ import {
   useVueTable,
 } from '@tanstack/vue-table'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 interface DataTableProps {
   columns: ColumnDef<TData, TValue>[]

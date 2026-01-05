@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import VirtualDataTable from './components/VirtualDataTable.vue'
 import { ArrowUpDown } from 'lucide-vue-next'
 
 interface Person {
@@ -111,7 +110,7 @@ const updateDataCount = (count: number) => {
       <h1 class="text-4xl font-bold mb-2">Vue Virtual Dynamic Scroller Table</h1>
       <p class="text-muted-foreground mb-4">
         A high-performance data table combining vue-virtual-scroller with shadcn-vue components,
-        capable of handling millions of rows with dynamic height.
+        capable of handling millions of rows with dynamic height. Built with Nuxt 4.
       </p>
       
       <div class="flex gap-4 flex-wrap items-center mb-4">
@@ -135,7 +134,14 @@ const updateDataCount = (count: number) => {
       </div>
     </div>
 
-    <VirtualDataTable :columns="columns" :data="data" :min-item-size="57" />
+    <ClientOnly>
+      <VirtualDataTable :columns="columns" :data="data" :min-item-size="57" />
+      <template #fallback>
+        <div class="flex items-center justify-center h-96">
+          <p class="text-muted-foreground">Loading table...</p>
+        </div>
+      </template>
+    </ClientOnly>
     
     <div class="mt-8 prose prose-sm max-w-none">
       <h2 class="text-2xl font-bold mb-4">Features</h2>
@@ -147,6 +153,7 @@ const updateDataCount = (count: number) => {
         <li>✅ Responsive design with Tailwind CSS</li>
         <li>✅ Built with shadcn-vue components</li>
         <li>✅ Powered by TanStack Table and vue-virtual-scroller</li>
+        <li>✅ Built on Nuxt 4 for enhanced performance</li>
       </ul>
     </div>
   </div>
@@ -157,4 +164,3 @@ const updateDataCount = (count: number) => {
   max-width: 1400px;
 }
 </style>
-

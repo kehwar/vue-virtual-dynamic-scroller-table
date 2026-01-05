@@ -1,12 +1,12 @@
 # Vue Virtual Dynamic Scroller Table
 
-A high-performance Vue 3 data table implementation combining [vue-virtual-scroller](https://github.com/Akryum/vue-virtual-scroller) with [shadcn-vue](https://www.shadcn-vue.com/) components and [TanStack Table](https://tanstack.com/table), capable of handling millions of rows with dynamic height and smooth scrolling performance.
+A high-performance Vue 3 data table implementation combining [vue-virtual-scroller](https://github.com/Akryum/vue-virtual-scroller) with [shadcn-vue](https://www.shadcn-vue.com/) components and [TanStack Table](https://tanstack.com/table), capable of handling millions of rows with dynamic height and smooth scrolling performance. **Built with Nuxt 4** for enhanced performance and modern development experience.
 
 ## 🚀 Demo
 
 Visit the live demo: [https://kehwar.github.io/vue-virtual-dynamic-scroller-table/](https://kehwar.github.io/vue-virtual-dynamic-scroller-table/)
 
-![Vue Virtual Dynamic Scroller Table Demo](https://github.com/user-attachments/assets/21c95275-0048-44f5-ae5c-3e1cb4ed8cd2)
+![Vue Virtual Dynamic Scroller Table Demo](https://github.com/user-attachments/assets/ca5577f0-c1e4-4518-9b72-6ede42331852)
 
 ## ✨ Features
 
@@ -17,16 +17,19 @@ Visit the live demo: [https://kehwar.github.io/vue-virtual-dynamic-scroller-tabl
 - ✅ **Responsive Design** - Styled with Tailwind CSS for modern, responsive UI
 - ✅ **Type-Safe** - Full TypeScript support
 - ✅ **Customizable** - Easy to extend and customize with shadcn-vue components
+- ✅ **Built on Nuxt 4** - Leverages Nuxt's auto-imports, file-based routing, and optimized build system
 
 ## 📦 Tech Stack
 
-- **Vue 3** - Progressive JavaScript framework
-- **TypeScript** - Type-safe development
-- **Vite** - Next-generation frontend tooling
-- **TanStack Table** - Headless UI for building powerful tables
-- **vue-virtual-scroller** - Virtual scrolling component for Vue
-- **shadcn-vue** - Re-usable components built with Radix Vue and Tailwind CSS
-- **Tailwind CSS** - Utility-first CSS framework
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Nuxt** | 4.2.2 | Meta-framework for Vue with SSR/SSG |
+| **Vue** | 3.5.26 | Progressive JavaScript framework |
+| **TypeScript** | 5.9 | Type-safe development |
+| **TanStack Table** | 8.x | Headless UI for building powerful tables |
+| **vue-virtual-scroller** | 2.0-beta | Virtual scrolling component for Vue |
+| **shadcn-vue** | Latest | Re-usable components built with Radix Vue |
+| **Tailwind CSS** | 3.x | Utility-first CSS framework |
 
 ## 🎯 Getting Started
 
@@ -40,7 +43,7 @@ cd vue-virtual-dynamic-scroller-table/demo
 
 2. Install dependencies:
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 3. Run the development server:
@@ -48,9 +51,14 @@ npm install
 npm run dev
 ```
 
-4. Build for production:
+4. Build for production (SSG):
 ```bash
-npm run build
+npm run generate
+```
+
+5. Preview production build:
+```bash
+npx serve .output/public
 ```
 
 ## 📖 Implementation Guide

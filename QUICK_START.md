@@ -1,38 +1,66 @@
 # Quick Start Guide
 
-This guide will help you integrate the Vue Virtual Dynamic Scroller Table into your existing Vue 3 project.
+This guide will help you integrate the Vue Virtual Dynamic Scroller Table into your existing **Nuxt 4** project.
 
 ## Prerequisites
 
-- Vue 3.x
+- Nuxt 4.x
 - Node.js 18+
-- TypeScript (optional but recommended)
+- TypeScript (recommended)
 
-## Step-by-Step Integration
+## Step-by-Step Integration for Nuxt 4
 
 ### 1. Install Dependencies
 
 ```bash
 # Core dependencies
-npm install vue-virtual-scroller@next @tanstack/vue-table
+npm install vue-virtual-scroller@next @tanstack/vue-table --legacy-peer-deps
 
 # shadcn-vue dependencies
 npm install radix-vue class-variance-authority clsx tailwind-merge lucide-vue-next
 
-# Tailwind CSS
-npm install -D tailwindcss@^3 postcss autoprefixer
+# Tailwind CSS module for Nuxt
+npm install -D @nuxtjs/tailwindcss
 ```
 
-### 2. Configure Tailwind CSS
+### 2. Configure Nuxt
 
-Create or update `tailwind.config.js`:
+Update `nuxt.config.ts`:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['@nuxtjs/tailwindcss'],
+  
+  app: {
+    head: {
+      title: 'Your App Title',
+    }
+  },
+  
+  css: ['~/assets/css/main.css'],
+  
+  typescript: {
+    typeCheck: false,
+    tsConfig: {
+      include: ['types/**/*.d.ts']
+    }
+  }
+})
+```
+
+### 3. Configure Tailwind CSS
+
+Create `tailwind.config.js`:
 
 ```js
 export default {
   darkMode: ["class"],
   content: [
-    "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./components/**/*.{js,vue,ts}",
+    "./layouts/**/*.vue",
+    "./pages/**/*.vue",
+    "./plugins/**/*.{js,ts}",
+    "./app.vue",
   ],
   theme: {
     extend: {
@@ -47,31 +75,39 @@ export default {
 }
 ```
 
-Create `postcss.config.js`:
-
-```js
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
-```
-
-Add Tailwind directives to your main CSS file:
+Create `assets/css/main.css`:
 
 ```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    /* Add other CSS variables... */
+  }
+}
 ```
 
-### 3. Copy Required Components
+### 4. Create Plugin for vue-virtual-scroller
 
-Copy these files from the demo to your project:
+Create `plugins/vue-virtual-scroller.client.ts`:
+
+```typescript
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+
+export default defineNuxtPlugin(() => {
+  // Vue virtual scroller CSS loaded globally
+})
+```
+
+### 5. Copy Required Components
+
+Copy these files/directories to your Nuxt project:
 
 ```
-src/
 ├── components/
 │   ├── VirtualDataTable.vue
 │   └── ui/table/
@@ -84,7 +120,30 @@ src/
 │       └── index.ts
 ├── lib/
 │   └── utils.ts
-└── vue-virtual-scroller.d.ts
+└── types/
+    └── vue-virtual-scroller.d.ts
+```
+
+### 6. Create Type Definitions
+
+Create `types/vue-virtual-scroller.d.ts`:
+
+```typescript
+declare module 'vue-virtual-scroller' {
+  import { DefineComponent, Slot } from 'vue'
+
+  export interface DynamicScrollerProps {
+    items: any[]
+    minItemSize: number | string
+    keyField?: string
+  }
+
+  export const DynamicScroller: DefineComponent<DynamicScrollerProps, {}, {}, {}, {}, {}, {}, {
+    default?: Slot<{ item: any; index: number; active: boolean }>
+  }>
+  
+  export const DynamicScrollerItem: DefineComponent<any>
+}
 ```
 
 ### 4. Create Your Data Model
@@ -129,16 +188,56 @@ const columns: ColumnDef<MyDataType>[] = [
 ]
 ```
 
-### 6. Use the Component
+### 7. Use the Component in Your Nuxt App
+
+In your `app.vue` or any page:
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-import VirtualDataTable from '@/components/VirtualDataTable.vue'
+import { ref, h } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
+import { ArrowUpDown } from 'lucide-vue-next'
 
 // Your data type
 interface MyDataType {
+  id: number
+  name: string
+}
+
+// Your columns
+const columns: ColumnDef<MyDataType>[] = [
+  { accessorKey: 'id', header: 'ID', size: 80 },
+  {
+    accessorKey: 'name',
+    header: ({ column }) => h('button', {
+      onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+    }, ['Name', h(ArrowUpDown, { class: 'ml-2 h-4 w-4' })])
+  },
+]
+
+// Your data
+const data = ref<MyDataType[]>([/* your data */])
+</script>
+
+<template>
+  <div class="container mx-auto py-10">
+    <ClientOnly>
+      <VirtualDataTable 
+        :columns="columns" 
+        :data="data" 
+        :min-item-size="57" 
+      />
+      <template #fallback>
+        <div class="flex items-center justify-center h-96">
+          <p>Loading table...</p>
+        </div>
+      </template>
+    </ClientOnly>
+  </div>
+</template>
+```
+
+**Important:** Always wrap `VirtualDataTable` in `<ClientOnly>` to avoid SSR hydration issues with the virtual scroller.
   id: number
   name: string
 }
