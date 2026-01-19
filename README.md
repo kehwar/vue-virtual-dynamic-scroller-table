@@ -33,12 +33,21 @@ Visit the live demo: [https://kehwar.github.io/vue-virtual-dynamic-scroller-tabl
 
 ## 🎯 Getting Started
 
+### Project Structure
+
+This project is structured as a **Nuxt Layer** system:
+
+- **`/demo`** - Nuxt layer containing reusable components (`VirtualDataTable.vue`, shadcn-ui components, utilities)
+- **Root directory** - Main Nuxt application that extends the demo layer
+
+This architecture allows the components to be easily shared and reused across different projects.
+
 ### Installation
 
 1. Clone the repository:
 ```bash
 git clone https://github.com/kehwar/vue-virtual-dynamic-scroller-table.git
-cd vue-virtual-dynamic-scroller-table/demo
+cd vue-virtual-dynamic-scroller-table
 ```
 
 2. Install dependencies:
@@ -61,7 +70,31 @@ npm run generate
 npx serve .output/public
 ```
 
-## 📖 Implementation Guide
+## 📖 Using the Layer in Your Project
+
+To use this table component in your own Nuxt project, extend the demo layer:
+
+1. Add this repository as a dependency or copy the `demo` folder to your project
+2. Update your `nuxt.config.ts`:
+```typescript
+export default defineNuxtConfig({
+  extends: ['./demo'], // or './path-to-layer'
+  // ... your other config
+})
+```
+
+3. Use the components in your app:
+```vue
+<template>
+  <VirtualDataTable :columns="columns" :data="data" />
+</template>
+```
+
+All components, plugins, and utilities from the layer will be automatically available!
+
+## 📖 Implementation Guide (Standalone)
+
+If you prefer to integrate the components directly without using the layer system:
 
 ### 1. Install Required Dependencies
 

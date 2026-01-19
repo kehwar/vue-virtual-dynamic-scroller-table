@@ -1,75 +1,78 @@
-# Nuxt Minimal Starter
+# Vue Virtual Dynamic Scroller Table - Nuxt Layer
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a **Nuxt Layer** that provides reusable components for building high-performance virtual scrolling data tables.
 
-## Setup
+## What's Included
 
-Make sure to install dependencies:
+This layer provides:
 
-```bash
-# npm
-npm install
+- **`VirtualDataTable.vue`** - Main virtual scrolling table component
+- **shadcn-vue UI components** - Table components and utilities
+- **Plugins** - Vue Virtual Scroller CSS loader
+- **Type definitions** - TypeScript support for vue-virtual-scroller
+- **Tailwind configuration** - Pre-configured theme with shadcn-vue colors
+- **Utilities** - Helper functions for component styling
 
-# pnpm
-pnpm install
+## Using This Layer
 
-# yarn
-yarn install
+### In This Project
 
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+The root directory extends this layer. To run the demo:
 
 ```bash
-# npm
+cd ..
+npm install --legacy-peer-deps
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+### In Your Own Nuxt Project
 
-Build the application for production:
+1. Copy this `demo` folder to your project (or add as a git submodule)
 
-```bash
-# npm
-npm run build
+2. Update your `nuxt.config.ts`:
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+```typescript
+export default defineNuxtConfig({
+  extends: ['./demo'], // path to this layer
+  // ... your other config
+})
 ```
 
-Locally preview production build:
+3. The layer's components will be automatically available:
 
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+```vue
+<template>
+  <VirtualDataTable :columns="columns" :data="data" />
+</template>
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Layer Structure
+
+```
+demo/
+├── components/          # Auto-imported components
+│   ├── VirtualDataTable.vue
+│   └── ui/             # shadcn-vue components
+├── lib/                # Utility functions
+│   └── utils.ts
+├── plugins/            # Nuxt plugins
+│   └── vue-virtual-scroller.client.ts
+├── assets/             # Styles
+│   └── css/main.css
+├── types/              # TypeScript definitions
+│   └── vue-virtual-scroller.d.ts
+├── nuxt.config.ts      # Layer configuration
+└── package.json        # Layer dependencies
+```
+
+## Configuration
+
+This layer configures:
+- **@nuxtjs/tailwindcss** - Tailwind CSS integration
+- **shadcn-nuxt** - shadcn-vue component management
+- **TypeScript** - Type checking and definitions
+- **Vite** - Vue script setup features
+
+## Learn More
+
+For more information about Nuxt Layers, check out the [Nuxt documentation](https://nuxt.com/docs/guide/going-further/layers).

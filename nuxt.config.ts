@@ -5,6 +5,8 @@ export default defineNuxtConfig({
   
   extends: ['./demo'],
   
+  css: ['./demo/assets/css/main.css'],
+  
   app: {
     baseURL: '/vue-virtual-dynamic-scroller-table/',
     head: {

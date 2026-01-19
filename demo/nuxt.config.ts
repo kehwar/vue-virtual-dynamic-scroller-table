@@ -10,8 +10,6 @@ export default defineNuxtConfig({
     componentDir: './components/ui',
   },
   
-  css: ['~/assets/css/main.css'],
-  
   typescript: {
     typeCheck: false,
     tsConfig: {
