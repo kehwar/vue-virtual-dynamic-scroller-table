@@ -1,0 +1,7 @@
+{
+  "name": "shadcn-layer",
+  "version": "1.0.0",
+  "description": "Upstream shadcn-vue components for comparison purposes",
+  "private": true,
+  "type": "module"
+}
