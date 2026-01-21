@@ -23,12 +23,6 @@ These components are installed using the shadcn-vue CLI from the official regist
 
 This layer is not meant to be used directly in the application. It serves as a reference layer for comparison purposes only.
 
-You can use the included comparison script to see differences:
-
-```bash
-./shadcn/compare.sh
-```
-
 ## Structure
 
 ```
@@ -69,12 +63,10 @@ When shadcn-vue releases updates to components, this layer should be updated to 
    shadcn-vue add table -y --cwd .
    ```
 
-3. Run the comparison script to identify changes:
-   ```bash
-   ./shadcn/compare.sh
-   ```
-
-This provides a clean diff between upstream and any customizations made in other layers.
+To compare differences between upstream and customized components, use standard diff tools:
+```bash
+diff shadcn/components/ui/table/Table.vue demo/components/ui/table/Table.vue
+```
 
 ## Source
 
