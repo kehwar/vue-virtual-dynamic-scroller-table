@@ -70,7 +70,8 @@ defineExpose({
 
 <template>
   <div class="w-full">
-    <div class="rounded-md border bg-background">
+    <!-- Outer container with overflow-auto enables horizontal scrolling for wide columns (matches shadcn Table.vue) -->
+    <div class="relative w-full overflow-auto rounded-md border bg-background">
       <!-- Header -->
       <div class="border-b">
         <div
@@ -146,8 +147,21 @@ defineExpose({
 
 <style scoped>
 .scroller {
-  height: 600px;
+  height: min(600px, 80vh);
   width: 100%;
   overflow-y: auto;
+  touch-action: pan-y;
+}
+
+@media (max-width: 768px) {
+  .scroller {
+    height: min(500px, 70vh);
+  }
+}
+
+@media (max-width: 640px) {
+  .scroller {
+    height: min(400px, 60vh);
+  }
 }
 </style>
