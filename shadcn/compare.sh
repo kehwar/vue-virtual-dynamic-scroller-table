@@ -9,11 +9,25 @@ echo "Table Components Comparison:"
 echo "----------------------------"
 for file in Table.vue TableBody.vue TableCell.vue TableHead.vue TableHeader.vue TableRow.vue index.ts; do
     echo "Comparing $file..."
-    if diff -q shadcn/components/ui/table/$file demo/components/ui/table/$file > /dev/null 2>&1; then
-        echo "  ✓ $file: Identical"
+    if [ -f demo/components/ui/table/$file ]; then
+        if diff -q shadcn/components/ui/table/$file demo/components/ui/table/$file > /dev/null 2>&1; then
+            echo "  ✓ $file: Identical"
+        else
+            echo "  ✗ $file: Different"
+            echo "    Run: diff shadcn/components/ui/table/$file demo/components/ui/table/$file"
+        fi
     else
-        echo "  ✗ $file: Different"
-        echo "    Run: diff shadcn/components/ui/table/$file demo/components/ui/table/$file"
+        echo "  ⚠ $file: Only in shadcn (upstream has additional components)"
+    fi
+done
+
+echo ""
+echo "Additional Components in shadcn (upstream):"
+echo "-------------------------------------------"
+for file in shadcn/components/ui/table/*.vue shadcn/components/ui/table/*.ts; do
+    filename=$(basename "$file")
+    if [ ! -f "demo/components/ui/table/$filename" ]; then
+        echo "  • $filename"
     fi
 done
 
