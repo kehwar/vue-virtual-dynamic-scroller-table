@@ -1,6 +1,6 @@
 # shadcn Layer
 
-This is a Nuxt layer that contains upstream shadcn-vue components in their original form, sourced directly from the official [shadcn-vue repository](https://github.com/radix-vue/shadcn-vue).
+This is a Nuxt layer that contains upstream shadcn-vue components in their original form, installed directly using the official [shadcn-vue CLI](https://www.shadcn-vue.com/docs/cli).
 
 ## Purpose
 
@@ -17,7 +17,7 @@ Currently, this layer includes:
 
 - **Table Components**: Table, TableBody, TableCaption, TableCell, TableEmpty, TableFooter, TableHead, TableHeader, TableRow
 
-These components are sourced from the official shadcn-vue repository's default style registry.
+These components are installed using the shadcn-vue CLI from the official registry.
 
 ## Usage
 
@@ -56,16 +56,17 @@ shadcn/
 
 ## Maintenance
 
-When shadcn-vue releases updates to components, this layer should be updated to reflect the upstream changes. To update components:
+When shadcn-vue releases updates to components, this layer should be updated to reflect the upstream changes. To update components using the shadcn CLI:
 
-1. Clone or pull the latest version of the shadcn-vue repository:
+1. Ensure shadcn-vue CLI is installed:
    ```bash
-   git clone https://github.com/radix-vue/shadcn-vue.git
+   npm install -g shadcn-vue@latest
    ```
 
-2. Copy the updated components from the registry:
+2. Navigate to the shadcn layer directory and use the CLI to update:
    ```bash
-   cp -r shadcn-vue/deprecated/www/src/registry/default/ui/table/* ./shadcn/components/ui/table/
+   cd shadcn
+   shadcn-vue add table -y --cwd .
    ```
 
 3. Run the comparison script to identify changes:
@@ -78,8 +79,9 @@ This provides a clean diff between upstream and any customizations made in other
 ## Source
 
 Components in this layer are sourced from:
-- Repository: https://github.com/radix-vue/shadcn-vue
-- Path: `deprecated/www/src/registry/default/ui/table/`
+- Method: **shadcn-vue CLI** (`shadcn-vue add table`)
+- Registry: https://www.shadcn-vue.com/r/styles/default/table.json
+- Version: 2.4.3
 - Style: `default`
 
-Note: The official shadcn-vue CLI was not used due to network restrictions. Components are manually synchronized from the official repository to ensure authenticity.
+The CLI automatically fetches the latest components from the official shadcn-vue registry and installs all required dependencies.
